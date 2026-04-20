@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kamal — Training Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Clash+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────── */
+:root {
+  --blue:    #3b82f6;
+  --blue-l:  #60a5fa;
+  --green:   #22c55e;
+  --green-l: #4ade80;
+  --amber:   #f59e0b;
+  --red:     #ef4444;
+  --purple:  #a855f7;
+
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-xl: 24px;
+  --r-2xl:32px;
+
+  --ease: cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
+
+  --font-ui:  'Plus Jakarta Sans', sans-serif;
+  --font-ar:  'Tajawal', sans-serif;
+  --font-num: 'Plus Jakarta Sans', sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg:       #09090b;
+  --surface:  #111114;
+  --card:     #18181b;
+  --card2:    #1f1f23;
+  --border:   rgba(255,255,255,.07);
+  --border2:  rgba(255,255,255,.12);
+  --ink:      #fafafa;
+  --ink2:     #a1a1aa;
+  --ink3:     #52525b;
+  --glow-b:   rgba(59,130,246,.15);
+  --glow-g:   rgba(34,197,94,.15);
+}
+
+[data-theme="light"] {
+  --bg:       #f4f4f5;
+  --surface:  #e4e4e7;
+  --card:     #ffffff;
+  --card2:    #f4f4f5;
+  --border:   rgba(0,0,0,.06);
+  --border2:  rgba(0,0,0,.12);
+  --ink:      #09090b;
+  --ink2:     #52525b;
+  --ink3:     #a1a1aa;
+  --glow-b:   rgba(59,130,246,.08);
+  --glow-g:   rgba(34,197,94,.08);
+}
+
+/* ─────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────── */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior:smooth; -webkit-tap-highlight-color:transparent }
+
+body {
+  font-family: var(--font-ar);
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background .25s var(--ease), color .25s var(--ease);
+  padding-bottom: 80px; /* bottom nav space */
+}
+
+::-webkit-scrollbar { width: 3px }
+::-webkit-scrollbar-track { background: transparent }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px }
+
+img { display:block; max-width:100% }
+button { cursor:pointer; border:none; background:none; font-family:inherit }
+
+/* ─────────────────────────────────────
+   TOP HEADER
+───────────────────────────────────── */
+.header {
+  position: sticky; top: 0; z-index: 300;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 0 16px;
+  height: 60px;
+  display: flex; align-items: center; gap: 12px;
+}
+
+.header-logo {
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--blue), var(--green));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+  box-shadow: 0 0 20px var(--glow-b);
+}
+
+.logo-text {
+  font-family: var(--font-ui);
+  font-size: 15px; font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+.logo-text span { color: var(--ink2); font-weight: 400 }
+
+.header-spacer { flex: 1 }
+
+.icon-btn {
+  width: 36px; height: 36px; border-radius: var(--r-sm);
+  background: var(--card);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  transition: all .18s var(--ease);
+  flex-shrink: 0;
+}
+.icon-btn:hover { border-color: var(--border2); transform: scale(1.05) }
+.icon-btn:active { transform: scale(.95) }
+
+.header-date {
+  font-family: var(--font-ui);
+  font-size: 11px; color: var(--ink3);
+  font-weight: 500; letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────
+   BOTTOM NAV (mobile-first)
+───────────────────────────────────── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  z-index: 300;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.bnav-btn {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+  color: var(--ink3);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .02em;
+  transition: color .18s var(--ease);
+  position: relative;
+}
+.bnav-btn .nav-icon { font-size: 20px; transition: transform .2s var(--spring) }
+.bnav-btn.active { color: var(--blue) }
+.bnav-btn.active .nav-icon { transform: scale(1.15) }
+.bnav-btn::before {
+  content: '';
+  position: absolute; top: 0; left: 25%; right: 25%;
+  height: 2px; border-radius: 0 0 2px 2px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transition: transform .2s var(--spring);
+}
+.bnav-btn.active::before { transform: scaleX(1) }
+
+/* ─────────────────────────────────────
+   SECTIONS
+───────────────────────────────────── */
+.section { display: none }
+.section.active { display: block; animation: sectionIn .3s var(--ease) both }
+@keyframes sectionIn {
+  from { opacity: 0; transform: translateY(10px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+
+.page-pad { padding: 20px 16px }
+
+/* ─────────────────────────────────────
+   TODAY — HERO CARD
+───────────────────────────────────── */
+.today-hero {
+  border-radius: var(--r-xl);
+  padding: 20px;
+  position: relative; overflow: hidden;
+  margin-bottom: 16px;
+  min-height: 180px;
+}
+
+.today-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--blue) 0%, #1d4ed8 50%, var(--green) 100%);
+  opacity: .12;
+}
+.today-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--card);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border2);
+}
+
+.today-hero-inner {
+  position: relative; z-index: 1;
+}
+
+.today-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(59,130,246,.15);
+  border: 1px solid rgba(59,130,246,.3);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px; font-weight: 600;
+  color: var(--blue-l);
+  font-family: var(--font-ui);
+  letter-spacing: .03em;
+  margin-bottom: 12px;
+}
+
+.today-day {
+  font-family: var(--font-ui);
+  font-size: 28px; font-weight: 700;
+  color: var(--ink); line-height: 1;
+  margin-bottom: 4px;
+}
+
+.today-subtitle {
+  font-size: 13px; color: var(--ink2);
+  margin-bottom: 18px;
+}
+
+.today-pills {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px;
+  font-size: 12px; font-weight: 600;
+  font-family: var(--font-ui);
+  border: 1px solid;
+}
+.pill-blue { background: rgba(59,130,246,.12); border-color: rgba(59,130,246,.3); color: var(--blue-l) }
+.pill-green { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.3); color: var(--green-l) }
+.pill-amber { background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.3); color: var(--amber) }
+.pill-red { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.25); color: var(--red) }
+.pill-muted { background: var(--card2); border-color: var(--border); color: var(--ink2) }
+.pill-purple { background: rgba(168,85,247,.12); border-color: rgba(168,85,247,.3); color: var(--purple) }
+
+/* ─────────────────────────────────────
+   STATS ROW
+───────────────────────────────────── */
+.stats-row {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 10px; margin-bottom: 16px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 12px;
+  text-align: center;
+  transition: border-color .18s;
+}
+.stat-card:hover { border-color: var(--border2) }
+
+.stat-icon { font-size: 20px; margin-bottom: 6px }
+.stat-num {
+  font-family: var(--font-ui);
+  font-size: 22px; font-weight: 700;
+  color: var(--ink); line-height: 1;
+  display: block;
+}
+.stat-lbl { font-size: 10px; color: var(--ink3); margin-top: 3px; font-weight: 500 }
+
+/* ─────────────────────────────────────
+   SECTION TITLE
+───────────────────────────────────── */
+.sec-title {
+  font-family: var(--font-ui);
+  font-size: 13px; font-weight: 700;
+  color: var(--ink2);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sec-title::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border);
+}
+
+/* ─────────────────────────────────────
+   WORKOUT BLOCK
+───────────────────────────────────── */
+.workout-block {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.wb-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.wb-icon {
+  width: 36px; height: 36px; border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+.wb-icon-blue { background: rgba(59,130,246,.15) }
+.wb-icon-green { background: rgba(34,197,94,.15) }
+.wb-icon-amber { background: rgba(245,158,11,.15) }
+.wb-icon-red { background: rgba(239,68,68,.12) }
+
+.wb-title { font-size: 14px; font-weight: 700; color: var(--ink) }
+.wb-sub   { font-size: 11px; color: var(--ink3); margin-top: 1px }
+.wb-meta  { margin-right: auto; font-family: var(--font-ui); font-size: 11px; color: var(--ink3); font-weight: 500 }
+
+/* ─────────────────────────────────────
+   EXERCISE ROW
+───────────────────────────────────── */
+.ex-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+}
+.ex-row:last-child { border-bottom: none }
+.ex-row:hover { background: var(--card2) }
+
+.ex-img {
+  width: 44px; height: 44px;
+  border-radius: var(--r-sm);
+  background: var(--card2);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.ex-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+}
+
+.ex-img-placeholder {
+  font-size: 20px;
+  opacity: .35;
+}
+
+/* Image slot indicator */
+.ex-img::after {
+  content: attr(data-slot);
+  position: absolute; bottom: 2px; right: 2px;
+  font-size: 7px; font-weight: 700;
+  font-family: var(--font-ui);
+  color: var(--ink3);
+  background: var(--bg);
+  padding: 1px 3px; border-radius: 3px;
+  letter-spacing: .03em;
+}
+
+.ex-info { flex: 1; min-width: 0 }
+.ex-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px }
+.ex-sets {
+  font-family: var(--font-ui);
+  font-size: 11px; color: var(--ink3); font-weight: 500;
+}
+
+.ex-badge {
+  font-family: var(--font-ui);
+  font-size: 10px; font-weight: 700;
+  padding: 4px 8px; border-radius: 6px;
+  flex-shrink: 0;
+  letter-spacing: .02em;
+}
+
+.eb-blue { background: rgba(59,130,246,.12); color: var(--blue-l) }
+.eb-green { background: rgba(34,197,94,.12); color: var(--green-l) }
+.eb-amber { background: rgba(245,158,11,.12); color: var(--amber) }
+.eb-red { background: rgba(239,68,68,.1); color: var(--red) }
+.eb-muted { background: var(--card2); color: var(--ink3) }
+
+/* ─────────────────────────────────────
+   REST ROW
+───────────────────────────────────── */
+.rest-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  background: var(--card2);
+  border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--ink3);
+  font-family: var(--font-ui); font-weight: 500;
+}
+
+/* ─────────────────────────────────────
+   ALERT
+───────────────────────────────────── */
+.alert {
+  display: flex; gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  margin-bottom: 12px;
+  border: 1px solid;
+  align-items: flex-start;
+  line-height: 1.6;
+}
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px }
+.alert-text { color: var(--ink2) }
+.alert-text strong { color: var(--ink) }
+.a-blue { background: rgba(59,130,246,.06); border-color: rgba(59,130,246,.2) }
+.a-green { background: rgba(34,197,94,.06); border-color: rgba(34,197,94,.2) }
+.a-amber { background: rgba(245,158,11,.06); border-color: rgba(245,158,11,.2) }
+.a-red { background: rgba(239,68,68,.06); border-color: rgba(239,68,68,.2) }
+
+/* ─────────────────────────────────────
+   WEEK GRID (Schedule)
+───────────────────────────────────── */
+.week-scroll {
+  overflow-x: auto; scrollbar-width: none;
+  margin: 0 -16px; padding: 0 16px;
+  margin-bottom: 16px;
+}
+.week-scroll::-webkit-scrollbar { display: none }
+
+.week-row {
+  display: flex; gap: 8px;
+  padding-bottom: 4px;
+  width: max-content;
+}
+
+.day-card {
+  width: 72px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 8px;
+  text-align: center;
+  transition: all .18s var(--ease);
+  flex-shrink: 0;
+}
+.day-card:hover { border-color: var(--border2); transform: translateY(-2px) }
+.day-card.today-dc {
+  border-color: var(--blue);
+  background: rgba(59,130,246,.06);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.12), 0 4px 16px rgba(59,130,246,.1);
+}
+.day-card.rest-dc { background: var(--card2) }
+
+.dc-name {
+  font-family: var(--font-ui);
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--ink3); margin-bottom: 8px;
+}
+.day-card.today-dc .dc-name { color: var(--blue-l) }
+
+.dc-icon { font-size: 22px; margin-bottom: 6px }
+
+.dc-label {
+  font-size: 9px; font-weight: 700;
+  font-family: var(--font-ui);
+  line-height: 1.3;
+}
+
+.dc-today-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--blue);
+  margin: 5px auto 0;
+}
+
+/* ─────────────────────────────────────
+   PHASE CARDS (Plan sections)
+───────────────────────────────────── */
+.phase-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.pc-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pc-num {
+  width: 40px; height: 40px; border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 15px; font-weight: 800;
+  flex-shrink: 0;
+}
+
+.pc-title { font-size: 14px; font-weight: 700; color: var(--ink) }
+.pc-sub   { font-size: 11px; color: var(--ink3); margin-top: 2px }
+.pc-badge { margin-right: auto }
+
+.pc-body { padding: 16px }
+
+.goal-chip {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--card2); border-radius: var(--r-sm);
+  padding: 12px; margin-bottom: 14px;
+  font-size: 12px; line-height: 1.6; color: var(--ink2);
+  border-right: 3px solid var(--border2);
+}
+.goal-chip strong { color: var(--ink) }
+
+/* ─────────────────────────────────────
+   TABLE (simple)
+───────────────────────────────────── */
+.simple-tbl { width: 100%; border-collapse: collapse }
+.simple-tbl tr { border-bottom: 1px solid var(--border) }
+.simple-tbl tr:last-child { border-bottom: none }
+.simple-tbl td {
+  padding: 10px 0; font-size: 13px; vertical-align: middle;
+}
+.simple-tbl td:first-child { color: var(--ink); font-weight: 500 }
+.simple-tbl td:last-child {
+  text-align: left;
+  font-family: var(--font-ui);
+  font-size: 11px; color: var(--ink3);
+  white-space: nowrap; font-weight: 600;
+}
+
+/* ─────────────────────────────────────
+   TIP ROW
+───────────────────────────────────── */
+.tip-row {
+  display: flex; gap: 12px; padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.tip-row:last-child { border-bottom: none }
+
+.tip-num {
+  width: 28px; height: 28px; border-radius: var(--r-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tip-content h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px }
+.tip-content p  { font-size: 12px; color: var(--ink3); line-height: 1.6 }
+
+/* ─────────────────────────────────────
+   VIDEO ROW
+───────────────────────────────────── */
+.vid-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.vid-row:last-child { border-bottom: none }
+
+.vid-thumb {
+  width: 52px; height: 36px; border-radius: var(--r-xs);
+  background: var(--card2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 18px;
+}
+
+.vid-info { flex: 1 }
+.vid-info h4 { font-size: 13px; font-weight: 600; color: var(--ink) }
+.vid-info p  { font-size: 11px; color: var(--ink3); margin-top: 2px; font-family: var(--font-ui) }
+
+/* ─────────────────────────────────────
+   PROGRESS BAR
+───────────────────────────────────── */
+.prog-wrap { margin-top: 12px }
+.prog-track {
+  height: 4px; background: var(--card2);
+  border-radius: 2px; overflow: hidden;
+}
+.prog-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  transition: width 1.2s cubic-bezier(.16,1,.3,1);
+}
+.prog-labels {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-ui); font-size: 10px;
+  color: var(--ink3); margin-top: 5px; font-weight: 500;
+}
+
+/* ─────────────────────────────────────
+   DIVIDER
+───────────────────────────────────── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 16px 0 }
+
+/* ─────────────────────────────────────
+   CARD (generic)
+───────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px; margin-bottom: 12px;
+}
+.card-hd {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 700; color: var(--ink);
+  margin-bottom: 14px;
+}
+.card-hd-icon {
+  width: 32px; height: 32px; border-radius: var(--r-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────
+   IMAGE GALLERY PLACEHOLDER
+───────────────────────────────────── */
+.img-slot {
+  aspect-ratio: 4/3;
+  background: var(--card2);
+  border: 2px dashed var(--border2);
+  border-radius: var(--r-md);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; color: var(--ink3);
+  font-size: 12px; font-family: var(--font-ui);
+  font-weight: 500; text-align: center;
+  padding: 16px;
+  position: relative; overflow: hidden;
+}
+.img-slot .slot-icon { font-size: 28px; opacity: .4 }
+.img-slot .slot-name { font-size: 11px; font-weight: 700; letter-spacing: .04em }
+.img-slot .slot-hint { font-size: 10px; opacity: .6 }
+
+/* ─────────────────────────────────────
+   TIMELINE
+───────────────────────────────────── */
+.timeline { position: relative; padding-right: 28px; margin-top: 8px }
+.timeline::before {
+  content: '';
+  position: absolute; right: 7px; top: 8px; bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--blue), var(--green));
+  border-radius: 2px;
+}
+.tl-item { position: relative; margin-bottom: 12px }
+.tl-dot {
+  position: absolute; right: -30px; top: 7px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid; background: var(--bg);
+}
+.tl-body {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 10px 12px;
+}
+.tl-body h4 { font-size: 13px; font-weight: 600; color: var(--ink) }
+.tl-body p  { font-size: 11px; color: var(--ink3); margin-top: 2px }
+
+/* ─────────────────────────────────────
+   RESPONSIVE — bigger screens
+───────────────────────────────────── */
+@media (min-width: 640px) {
+  body { padding-bottom: 0 }
+  .bottom-nav { display: none }
+  .desktop-nav { display: flex }
+  .page-pad { padding: 28px 24px; max-width: 700px; margin: 0 auto }
+  .stats-row { grid-template-columns: repeat(4,1fr) }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+}
+@media (max-width: 639px) {
+  .desktop-nav { display: none }
+  .two-col { display: block }
+}
+
+/* ─────────────────────────────────────
+   DESKTOP TOP NAV
+───────────────────────────────────── */
+.desktop-nav {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.desktop-nav::-webkit-scrollbar { display: none }
+.desktop-nav-inner { display: flex; max-width: 700px; margin: 0 auto }
+
+.dnav-btn {
+  font-size: 13px; font-weight: 600;
+  color: var(--ink3);
+  padding: 14px 16px;
+  white-space: nowrap;
+  position: relative;
+  transition: color .18s;
+  display: flex; align-items: center; gap: 6px;
+}
+.dnav-btn::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; border-radius: 2px 2px 0 0;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  transform: scaleX(0);
+  transition: transform .2s var(--spring);
+}
+.dnav-btn.active { color: var(--ink) }
+.dnav-btn.active::after { transform: scaleX(1) }
+.dnav-btn:hover { color: var(--ink2) }
+
+/* ─────────────────────────────────────
+   REST DAY
+───────────────────────────────────── */
+.rest-hero {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 32px 20px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.rest-hero-icon { font-size: 48px; margin-bottom: 12px }
+.rest-hero-title { font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 6px; font-family: var(--font-ui) }
+.rest-hero-sub { font-size: 13px; color: var(--ink2); line-height: 1.6 }
+
+/* ─────────────────────────────────────
+   ANIM STAGGER
+───────────────────────────────────── */
+.stagger > * { animation: fadeUp .3s var(--ease) both }
+.stagger > *:nth-child(1) { animation-delay: .05s }
+.stagger > *:nth-child(2) { animation-delay: .1s }
+.stagger > *:nth-child(3) { animation-delay: .15s }
+.stagger > *:nth-child(4) { animation-delay: .2s }
+.stagger > *:nth-child(5) { animation-delay: .25s }
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(12px) }
+  to   { opacity:1; transform:translateY(0) }
+}
+
+/* grad text util */
+.grad { background: linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header class="header">
+  <div class="header-logo">
+    <div class="logo-mark">🏋️</div>
+    <div class="logo-text">Kamal <span>Training</span></div>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="header-date" id="hdr-date">...</div>
+  <button class="icon-btn" onclick="toggleTheme()" id="theme-btn" title="تبديل الثيم">🌙</button>
+</header>
+
+<!-- ══════════ DESKTOP NAV ══════════ -->
+<nav class="desktop-nav">
+  <div class="desktop-nav-inner">
+    <button class="dnav-btn active" onclick="showTab('today',this)">📅 اليوم</button>
+    <button class="dnav-btn" onclick="showTab('schedule',this)">📆 الجدول</button>
+    <button class="dnav-btn" onclick="showTab('hs',this)">🤸 Handstand</button>
+    <button class="dnav-btn" onclick="showTab('pl',this)">💪 Planche</button>
+    <button class="dnav-btn" onclick="showTab('warmup',this)">🔥 تسخين</button>
+    <button class="dnav-btn" onclick="showTab('tips',this)">⭐ نصائح</button>
+    <button class="dnav-btn" onclick="showTab('videos',this)">🎬 فيديوهات</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     TODAY
+══════════════════════════════════════ -->
+<div id="today" class="section active">
+<div class="page-pad stagger">
+
+  <!-- Hero -->
+  <div class="today-hero">
+    <div class="today-hero-inner">
+      <div class="today-chip" id="today-chip">📅 <span id="today-chip-txt">...</span></div>
+      <div class="today-day" id="today-day">...</div>
+      <div class="today-subtitle" id="today-subtitle">...</div>
+      <div class="today-pills" id="today-pills"></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon">⏱️</div>
+      <span class="stat-num" id="stat-dur">—</span>
+      <span class="stat-lbl">دقيقة</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💪</div>
+      <span class="stat-num" id="stat-ex">—</span>
+      <span class="stat-lbl">تمرين</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📆</div>
+      <span class="stat-num" id="stat-wk">—</span>
+      <span class="stat-lbl">أسبوع</span>
+    </div>
+  </div>
+
+  <!-- Workout content -->
+  <div id="today-content"></div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCHEDULE
+══════════════════════════════════════ -->
+<div id="schedule" class="section">
+<div class="page-pad stagger">
+
+  <div class="card-hd" style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">
+    📆 الجدول الأسبوعي
+  </div>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:16px">اضغط على أي يوم للتفاصيل</p>
+
+  <div class="week-scroll">
+    <div class="week-row" id="week-row"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="card-hd-icon" style="background:rgba(59,130,246,.12)">📋</div>تفاصيل الأسبوع</div>
+    <table class="simple-tbl">
+      <tr><td>🔵 الاثنين</td><td><span class="pill pill-blue" style="font-size:10px">HS + Planche</span></td></tr>
+      <tr><td>🤸 الثلاثاء</td><td><span class="pill pill-blue" style="font-size:10px">HS فقط</span></td></tr>
+      <tr><td>🔵 الأربعاء</td><td><span class="pill pill-blue" style="font-size:10px">HS + Planche</span></td></tr>
+      <tr><td>💚 الخميس</td><td><span class="pill pill-green" style="font-size:10px">Planche دعم + Core</span></td></tr>
+      <tr><td>🔵 الجمعة</td><td><span class="pill pill-blue" style="font-size:10px">HS + Planche</span></td></tr>
+      <tr><td>💚 السبت</td><td><span class="pill pill-green" style="font-size:10px">Planche + HS خفيف</span></td></tr>
+      <tr><td>😴 الأحد</td><td><span class="pill pill-muted" style="font-size:10px">راحة كاملة</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="card-hd-icon" style="background:rgba(245,158,11,.12)">⏱️</div>توزيع الوقت — يوم كامل</div>
+    <table class="simple-tbl">
+      <tr><td>🔥 تسخين</td><td>10 دق</td></tr>
+      <tr><td>🤸 Handstand <em style="color:var(--ink3);font-size:10px">(أول دايماً)</em></td><td>20 دق</td></tr>
+      <tr><td>💪 Planche</td><td>35 دق</td></tr>
+      <tr><td>🧘 إطالة</td><td>10 دق</td></tr>
+      <tr><td style="font-weight:700">المجموع</td><td style="color:var(--blue-l);font-weight:800">75 دق</td></tr>
+    </table>
+  </div>
+
+  <div class="alert a-blue">
+    <div class="alert-icon">💡</div>
+    <div class="alert-text"><strong>مهم:</strong> الـ Handstand دايماً أول التمرين — هو skill محتاج تركيز كامل وجسم طازج</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     HANDSTAND
+══════════════════════════════════════ -->
+<div id="hs" class="section">
+<div class="page-pad stagger">
+
+  <div class="card-hd" style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">🤸 خطة Handstand</div>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:16px">من 5 ثواني لـ 60 ثانية في 3-5 شهور</p>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-icon" style="background:rgba(59,130,246,.12)">📊</div>مستواك الحالي</div>
+      <table class="simple-tbl">
+        <tr><td>Wall HS</td><td><span class="pill pill-green" style="font-size:10px">30 ث ✓</span></td></tr>
+        <tr><td>Free HS</td><td><span class="pill pill-amber" style="font-size:10px">1-5 ث</span></td></tr>
+        <tr><td>Kick-up</td><td><span class="pill pill-red" style="font-size:10px">غير متسق</span></td></tr>
+        <tr><td>المرونة</td><td><span class="pill pill-green" style="font-size:10px">كويس ✓</span></td></tr>
+      </table>
+      <div class="prog-wrap">
+        <div class="prog-track"><div class="prog-fill" style="width:35%"></div></div>
+        <div class="prog-labels"><span>مبتدئ</span><span>35%</span><span>Expert</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-icon" style="background:rgba(34,197,94,.12)">🎯</div>الـ Progression</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--blue);background:rgba(59,130,246,.2)"></div>
+          <div class="tl-body"><h4>5 ث free <span class="pill pill-green" style="font-size:9px;padding:2px 6px">أنت هنا</span></h4><p>الشهر الأول</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--amber)"></div>
+          <div class="tl-body"><h4>15 ث consistent</h4><p>الأسبوع 3-4</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--green)"></div>
+          <div class="tl-body"><h4>30 ث free</h4><p>الشهر 2-3</p></div>
+        </div>
+        <div class="tl-item" style="margin-bottom:0">
+          <div class="tl-dot" style="border-color:#ffd700"></div>
+          <div class="tl-body"><h4>60 ث free 🏆</h4><p>الشهر 4-5</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HS Phase 1 -->
+  <div class="phase-card">
+    <div class="pc-header">
+      <div class="pc-num" style="background:rgba(59,130,246,.12);color:var(--blue-l)">01</div>
+      <div>
+        <div class="pc-title">Finger Pressure Control</div>
+        <div class="pc-sub">الأسبوع 1-3 — السر الحقيقي للـ balance</div>
+      </div>
+      <span class="pill pill-blue pc-badge" style="font-size:10px">3 أسابيع</span>
+    </div>
+    <div class="pc-body">
+      <div class="goal-chip"><span>🎯</span><div>الهدف: <strong>Wall HS بدون لمس الحيط 10 ث + Finger pressure control</strong></div></div>
+
+      <div class="sec-title">التمارين اليومية</div>
+
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG">
+            <div class="ex-img-placeholder">🤸</div>
+          </div>
+          <div class="ex-info">
+            <div class="ex-name">Wall HS — أصابع بس تلمس الحيط</div>
+            <div class="ex-sets">5 مجموعات</div>
+          </div>
+          <div class="ex-badge eb-blue">5 × 20 ث</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG">
+            <div class="ex-img-placeholder">🧱</div>
+          </div>
+          <div class="ex-info">
+            <div class="ex-name">Chest-to-wall → تحريك الجسم للخلف</div>
+            <div class="ex-sets">5 مجموعات</div>
+          </div>
+          <div class="ex-badge eb-blue">5 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG">
+            <div class="ex-img-placeholder">🐦</div>
+          </div>
+          <div class="ex-info">
+            <div class="ex-name">Crow Pose balance drill</div>
+            <div class="ex-sets">3 مجموعات</div>
+          </div>
+          <div class="ex-badge eb-muted">3 × 15 ث</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG">
+            <div class="ex-img-placeholder">⬆️</div>
+          </div>
+          <div class="ex-info">
+            <div class="ex-name">Kick-up attempts — straight body</div>
+            <div class="ex-sets">يومياً</div>
+          </div>
+          <div class="ex-badge eb-amber">10 محاولة</div>
+        </div>
+        <div class="rest-row">⏱️ راحة بين المجموعات: 60-90 ثانية</div>
+      </div>
+
+      <div class="alert a-blue">
+        <div class="alert-icon">💡</div>
+        <div class="alert-text"><strong>السر:</strong> تقع للأمام = اضغط بطرف الأصابع. للخلف = اضغط بأصل الكف. ده كل علم الـ handstand</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HS Phase 2 -->
+  <div class="phase-card">
+    <div class="pc-header">
+      <div class="pc-num" style="background:rgba(245,158,11,.12);color:var(--amber)">02</div>
+      <div>
+        <div class="pc-title">Kick-up Consistency & Body Line</div>
+        <div class="pc-sub">الأسبوع 4-7 — الـ kick-up المتسق = hold طويل</div>
+      </div>
+      <span class="pill pill-amber pc-badge" style="font-size:10px">4 أسابيع</span>
+    </div>
+    <div class="pc-body">
+      <div class="goal-chip"><span>🎯</span><div>الهدف: <strong>10 ث free HS بـ straight line — 7 من كل 10 محاولات</strong></div></div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🤸</div></div>
+          <div class="ex-info"><div class="ex-name">Tuck HS hold</div><div class="ex-sets">5 مجموعات</div></div>
+          <div class="ex-badge eb-amber">5 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🦵</div></div>
+          <div class="ex-info"><div class="ex-name">Straight body kick-ups</div><div class="ex-sets">محاولات</div></div>
+          <div class="ex-badge eb-amber">15 محاولة</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🏋️</div></div>
+          <div class="ex-info"><div class="ex-name">Hollow body hold</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-muted">4 × 40 ث</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🦶</div></div>
+          <div class="ex-info"><div class="ex-name">Wall HS → lift one foot</div><div class="ex-sets">كل رجل</div></div>
+          <div class="ex-badge eb-muted">3 × جهة</div>
+        </div>
+        <div class="rest-row">⏱️ راحة: 60 ثانية</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HS Phase 3 -->
+  <div class="phase-card">
+    <div class="pc-header">
+      <div class="pc-num" style="background:rgba(34,197,94,.12);color:var(--green-l)">03</div>
+      <div>
+        <div class="pc-title">30 Second Free Handstand</div>
+        <div class="pc-sub">الشهر 2-3 — بناء الـ hold time</div>
+      </div>
+      <span class="pill pill-green pc-badge" style="font-size:10px">4-6 أسابيع</span>
+    </div>
+    <div class="pc-body">
+      <div class="goal-chip"><span>🎯</span><div>الهدف: <strong>30 ثانية free HS نظيفة ومتسقة</strong></div></div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">⏱️</div></div>
+          <div class="ex-info"><div class="ex-name">Free HS max holds</div><div class="ex-sets">10 مجموعات</div></div>
+          <div class="ex-badge eb-green">10 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🚶</div></div>
+          <div class="ex-info"><div class="ex-name">HS walking</div><div class="ex-sets">3 مجموعات</div></div>
+          <div class="ex-badge eb-green">3 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🎯</div></div>
+          <div class="ex-info"><div class="ex-name">Timed HS (target 15 ث)</div><div class="ex-sets">8 محاولة</div></div>
+          <div class="ex-badge eb-muted">8 × محاولة</div>
+        </div>
+        <div class="rest-row">⏱️ راحة: 90 ثانية بين كل hold</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HS Phase 4 -->
+  <div class="phase-card">
+    <div class="pc-header">
+      <div class="pc-num" style="background:rgba(168,85,247,.12);color:var(--purple)">04</div>
+      <div>
+        <div class="pc-title">60 Second Elite Handstand 🏆</div>
+        <div class="pc-sub">الشهر 4-5 — الهدف النهائي</div>
+      </div>
+      <span class="pill pill-purple pc-badge" style="font-size:10px">4-6 أسابيع</span>
+    </div>
+    <div class="pc-body">
+      <div class="goal-chip"><span>🏆</span><div>الهدف: <strong>60 ثانية free HS + walking + push-ups</strong></div></div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🤸</div></div>
+          <div class="ex-info"><div class="ex-name">Free HS max holds</div><div class="ex-sets">8 مجموعات</div></div>
+          <div class="ex-badge eb-muted">8 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">⬇️</div></div>
+          <div class="ex-info"><div class="ex-name">HS push-ups على الحيط</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-muted">4 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🔄</div></div>
+          <div class="ex-info"><div class="ex-name">Pirouette 360°</div><div class="ex-sets">كل اتجاه</div></div>
+          <div class="ex-badge eb-muted">3 × جهة</div>
+        </div>
+        <div class="rest-row">⏱️ راحة: 2 دقيقة بين كل hold طويل</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PLANCHE
+══════════════════════════════════════ -->
+<div id="pl" class="section">
+<div class="page-pad stagger">
+
+  <div class="card-hd" style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">💪 خطة Planche</div>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:16px">من Tuck Planche لـ Full Planche في 6-9 شهور</p>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-icon" style="background:rgba(34,197,94,.12)">📊</div>مستواك الحالي</div>
+      <table class="simple-tbl">
+        <tr><td>Pull-ups</td><td><span class="pill pill-green" style="font-size:10px">10 عدات ✓</span></td></tr>
+        <tr><td>Dips</td><td><span class="pill pill-green" style="font-size:10px">20-30 ✓</span></td></tr>
+        <tr><td>Push-ups</td><td><span class="pill pill-green" style="font-size:10px">50-60 ✓</span></td></tr>
+        <tr><td>L-sit</td><td><span class="pill pill-amber" style="font-size:10px">10 ث</span></td></tr>
+        <tr><td>Tuck Planche</td><td><span class="pill pill-red" style="font-size:10px">2-5 ث</span></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-icon" style="background:rgba(34,197,94,.12)">🎯</div>الـ Progression</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--green);background:rgba(34,197,94,.2)"></div>
+          <div class="tl-body"><h4>Tuck Planche <span class="pill pill-green" style="font-size:9px;padding:2px 6px">أنت هنا</span></h4><p>الشهر 1-2</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--amber)"></div>
+          <div class="tl-body"><h4>Advanced Tuck</h4><p>الشهر 3-5</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="border-color:var(--blue)"></div>
+          <div class="tl-body"><h4>Straddle Planche</h4><p>الشهر 6-7</p></div>
+        </div>
+        <div class="tl-item" style="margin-bottom:0">
+          <div class="tl-dot" style="border-color:#ffd700"></div>
+          <div class="tl-body"><h4>Full Planche 🏆</h4><p>الشهر 8-9</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PL Phase 1 -->
+  <div class="phase-card">
+    <div class="pc-header">
+      <div class="pc-num" style="background:rgba(34,197,94,.12);color:var(--green-l)">01</div>
+      <div><div class="pc-title">تقوية الأساس — Tuck Planche</div><div class="pc-sub">الشهر 1-2</div></div>
+      <span class="pill pill-green pc-badge" style="font-size:10px">شهران</span>
+    </div>
+    <div class="pc-body">
+      <div class="goal-chip"><span>🎯</span><div>الهدف: <strong>Tuck Planche ثابتة 10-15 ثانية بشكل نظيف</strong></div></div>
+      <div class="sec-title">أيام البلانش — 3 مرات/أسبوع</div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">💪</div></div>
+          <div class="ex-info"><div class="ex-name">Tuck Planche Hold</div><div class="ex-sets">5 مجموعات</div></div>
+          <div class="ex-badge eb-green">5 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">↗️</div></div>
+          <div class="ex-info"><div class="ex-name">Planche Lean على الأرض</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-green">4 × 20 ث</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">⬇️</div></div>
+          <div class="ex-info"><div class="ex-name">Pseudo Planche Push-ups</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-green">4 × 8-12</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🏋️</div></div>
+          <div class="ex-info"><div class="ex-name">Hollow Body Hold</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-muted">4 × 30 ث</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🦾</div></div>
+          <div class="ex-info"><div class="ex-name">Scapular Push-ups</div><div class="ex-sets">3 مجموعات</div></div>
+          <div class="ex-badge eb-muted">3 × 15</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🦵</div></div>
+          <div class="ex-info"><div class="ex-name">L-sit Hold</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-muted">4 × max</div>
+        </div>
+        <div class="rest-row">⏱️ 2-3 دق للـ holds — 90 ث للعدات</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PL Phase 2 -->
+  <div class="phase-card">
+    <div class="pc-header">
+      <div class="pc-num" style="background:rgba(245,158,11,.12);color:var(--amber)">02</div>
+      <div><div class="pc-title">Advanced Tuck Planche</div><div class="pc-sub">الشهر 3-5</div></div>
+      <span class="pill pill-amber pc-badge" style="font-size:10px">3 شهور</span>
+    </div>
+    <div class="pc-body">
+      <div class="goal-chip"><span>🎯</span><div>الهدف: <strong>Advanced Tuck Planche 8-10 ث مع ظهر موازي للأرض</strong></div></div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">💪</div></div>
+          <div class="ex-info"><div class="ex-name">Advanced Tuck Planche Hold</div><div class="ex-sets">6 مجموعات</div></div>
+          <div class="ex-badge eb-amber">6 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🔄</div></div>
+          <div class="ex-info"><div class="ex-name">Tuck → Advanced Tuck transitions</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-amber">4 × 5</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">↗️</div></div>
+          <div class="ex-info"><div class="ex-name">Straddle Planche Lean</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-muted">4 × 20 ث</div>
+        </div>
+        <div class="rest-row">⏱️ راحة: 3-4 دقائق للـ holds</div>
+      </div>
+      <div class="alert a-amber">
+        <div class="alert-icon">⚡</div>
+        <div class="alert-text"><strong>التركيز:</strong> الـ protraction — دفع الكتف للأمام والخارج هو سر المرحلة دي</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PL Phase 3 -->
+  <div class="phase-card">
+    <div class="pc-header">
+      <div class="pc-num" style="background:rgba(168,85,247,.12);color:var(--purple)">03</div>
+      <div><div class="pc-title">Straddle → Full Planche 🏆</div><div class="pc-sub">الشهر 6-9</div></div>
+      <span class="pill pill-purple pc-badge" style="font-size:10px">3-4 شهور</span>
+    </div>
+    <div class="pc-body">
+      <div class="goal-chip"><span>🏆</span><div>الهدف: <strong>Full Planche أو Straddle 5 ثواني نظيفة</strong></div></div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">💪</div></div>
+          <div class="ex-info"><div class="ex-name">Straddle Planche Hold</div><div class="ex-sets">6 مجموعات</div></div>
+          <div class="ex-badge eb-muted">6 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">⬇️</div></div>
+          <div class="ex-info"><div class="ex-name">Straddle Planche Push-ups</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-muted">4 × 3-5</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🏆</div></div>
+          <div class="ex-info"><div class="ex-name">Full Planche attempts</div><div class="ex-sets">5 مجموعات</div></div>
+          <div class="ex-badge eb-muted">5 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">⬇️</div></div>
+          <div class="ex-info"><div class="ex-name">Planche negatives</div><div class="ex-sets">4 مجموعات</div></div>
+          <div class="ex-badge eb-muted">4 × 3</div>
+        </div>
+        <div class="rest-row">⏱️ راحة: 4 دقائق كاملة — ضرورية هنا</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WARMUP
+══════════════════════════════════════ -->
+<div id="warmup" class="section">
+<div class="page-pad stagger">
+
+  <div class="card-hd" style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">🔥 تسخين وإطالة</div>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:16px">10 دق قبل + 10 دق بعد — جزء من التدريب مش إضافة</p>
+
+  <div class="alert a-red">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-text"><strong>تحذير:</strong> الرسغين هم أكتر جزء بيتعطل في الاتنين — اعمل wrist conditioning كل يوم. أي ألم حاد = وقف فوراً</div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="sec-title" style="color:var(--blue-l)">🤸 تسخين Handstand</div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🔄</div></div>
+          <div class="ex-info"><div class="ex-name">Wrist circles</div></div>
+          <div class="ex-badge eb-blue">2 دق</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🦴</div></div>
+          <div class="ex-info"><div class="ex-name">Shoulder circles</div></div>
+          <div class="ex-badge eb-blue">30 ث × 2</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🐱</div></div>
+          <div class="ex-info"><div class="ex-name">Cat-cow stretch</div></div>
+          <div class="ex-badge eb-blue">10 تكرار</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🏋️</div></div>
+          <div class="ex-info"><div class="ex-name">Hollow body rocking</div></div>
+          <div class="ex-badge eb-muted">2 × 30 ث</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🚶</div></div>
+          <div class="ex-info"><div class="ex-name">Pike HS walks</div></div>
+          <div class="ex-badge eb-muted">3 مرات</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title" style="color:var(--green-l)">💪 تسخين Planche</div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🔄</div></div>
+          <div class="ex-info"><div class="ex-name">Wrist flexion/extension</div></div>
+          <div class="ex-badge eb-green">2 دق</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🦴</div></div>
+          <div class="ex-info"><div class="ex-name">Shoulder dislocations</div></div>
+          <div class="ex-badge eb-green">10 تكرار</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">💪</div></div>
+          <div class="ex-info"><div class="ex-name">Scapular push-ups</div></div>
+          <div class="ex-badge eb-green">2 × 10</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🏋️</div></div>
+          <div class="ex-info"><div class="ex-name">Band pull-aparts</div></div>
+          <div class="ex-badge eb-muted">2 × 15</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🤸</div></div>
+          <div class="ex-info"><div class="ex-name">Hollow body hold</div></div>
+          <div class="ex-badge eb-muted">3 × 20 ث</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:8px">🧘 الإطالة — بعد التمرين</div>
+  <div class="two-col">
+    <div class="workout-block">
+      <div class="ex-row">
+        <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🙏</div></div>
+        <div class="ex-info"><div class="ex-name">Wrist flexor stretch</div></div>
+        <div class="ex-badge eb-blue">60 ث × يد</div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🚪</div></div>
+        <div class="ex-info"><div class="ex-name">Doorway chest stretch</div></div>
+        <div class="ex-badge eb-blue">60 ث</div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🧘</div></div>
+        <div class="ex-info"><div class="ex-name">Child's pose مع reach</div></div>
+        <div class="ex-badge eb-muted">60 ث</div>
+      </div>
+    </div>
+    <div class="workout-block">
+      <div class="ex-row">
+        <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🔄</div></div>
+        <div class="ex-info"><div class="ex-name">Shoulder cross stretch</div></div>
+        <div class="ex-badge eb-green">45 ث × كتف</div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🦵</div></div>
+        <div class="ex-info"><div class="ex-name">Pike stretch للـ L-sit</div></div>
+        <div class="ex-badge eb-green">60 ث</div>
+      </div>
+      <div class="ex-row">
+        <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">🔀</div></div>
+        <div class="ex-info"><div class="ex-name">Thoracic rotation</div></div>
+        <div class="ex-badge eb-muted">10 × جهة</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TIPS
+══════════════════════════════════════ -->
+<div id="tips" class="section">
+<div class="page-pad stagger">
+
+  <div class="card-hd" style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">⭐ نصائح ذهبية</div>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:16px">الفرق بين اللي بيوصل واللي بيفضل يعدّل</p>
+
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-hd"><div class="card-hd-icon" style="background:rgba(59,130,246,.12)">🤸</div>نصائح Handstand</div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(59,130,246,.12);color:var(--blue-l)">01</div>
+      <div class="tip-content"><h4>الـ Balance في الأصابع مش في الجسم</h4><p>تقع للأمام = اضغط بطرف الأصابع. للخلف = اضغط بأصل الكف</p></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(59,130,246,.12);color:var(--blue-l)">02</div>
+      <div class="tip-content"><h4>Chest-to-wall أهم من Back-to-wall</h4><p>الصدر للحيط بيعلمك الـ straight line الصح ويقرّب من الـ free HS</p></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(59,130,246,.12);color:var(--blue-l)">03</div>
+      <div class="tip-content"><h4>20 دقيقة يومياً أحسن من ساعة مرتين</h4><p>الـ HS skill — الدماغ بيتعلم بالتكرار اليومي مش بالحجم الكبير</p></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(59,130,246,.12);color:var(--blue-l)">04</div>
+      <div class="tip-content"><h4>تعلم الـ Cartwheel Exit أولاً</h4><p>لما تعرف تطلع بأمان، الخوف بيختفي وتقدر تركز على الـ balance</p></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(59,130,246,.12);color:var(--blue-l)">05</div>
+      <div class="tip-content"><h4>صوّر نفسك من الجانب دايماً</h4><p>مش هتعرف شكل الـ line بتاعتك إلا بالفيديو</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="card-hd-icon" style="background:rgba(34,197,94,.12)">💪</div>نصائح Planche</div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(34,197,94,.12);color:var(--green-l)">01</div>
+      <div class="tip-content"><h4>الرسغين أهم من أي حاجة</h4><p>Wrist conditioning كل يوم بدون استثناء — أكتر إصابات البلانش من الرسغين</p></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(34,197,94,.12);color:var(--green-l)">02</div>
+      <div class="tip-content"><h4>الـ Protraction مش اختياري</h4><p>دفع الكتف للأمام والخارج — من غيرها مهما كانت قوتك مش هيحصل</p></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(34,197,94,.12);color:var(--green-l)">03</div>
+      <div class="tip-content"><h4>Quality فوق Quantity دايماً</h4><p>ثانيتين شكل صح أحسن من 10 ثواني شكل غلط</p></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(34,197,94,.12);color:var(--green-l)">04</div>
+      <div class="tip-content"><h4>وزنك 62 كجم ميزة ضخمة</h4><p>البلانش بيصعب مع كل كيلو زيادة — أنت في أفضل وضع ممكن</p></div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-num" style="background:rgba(34,197,94,.12);color:var(--green-l)">05</div>
+      <div class="tip-content"><h4>Deload كل 4-5 أسابيع</h4><p>أسبوع بـ 50% الحجم — الجسم بيتطور في الراحة أكتر من التمرين</p></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:4px">
+    <div class="card-hd"><div class="card-hd-icon" style="background:rgba(245,158,11,.12)">🍽️</div>الأكل والنوم — جزء من التدريب</div>
+    <table class="simple-tbl">
+      <tr><td>💪 البروتين اليومي</td><td><strong style="color:var(--green-l)">99-124g</strong></td></tr>
+      <tr><td>😴 النوم</td><td><strong style="color:var(--blue-l)">8 ساعات+</strong></td></tr>
+      <tr><td>💧 الماء</td><td><strong style="color:var(--blue-l)">3 لتر+</strong></td></tr>
+      <tr><td>📸 سجّل تقدمك</td><td><strong style="color:var(--amber)">فيديو كل أسبوعين</strong></td></tr>
+    </table>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     VIDEOS
+══════════════════════════════════════ -->
+<div id="videos" class="section">
+<div class="page-pad stagger">
+
+  <div class="card-hd" style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">🎬 فيديوهات تعليمية</div>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:16px">ابحث عن الكلمات دي على يوتيوب</p>
+
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-hd"><div class="card-hd-icon" style="background:rgba(59,130,246,.12)">🤸</div>Handstand</div>
+    <div class="vid-row">
+      <div class="vid-thumb">🤸</div>
+      <div class="vid-info"><h4>Finger Pressure Balance</h4><p>"handstand finger pressure control tutorial"</p></div>
+      <span class="pill pill-red" style="font-size:10px">الأهم</span>
+    </div>
+    <div class="vid-row">
+      <div class="vid-thumb">⬆️</div>
+      <div class="vid-info"><h4>Perfect Kick-up</h4><p>"handstand kick up technique"</p></div>
+      <span class="pill pill-blue" style="font-size:10px">مهم</span>
+    </div>
+    <div class="vid-row">
+      <div class="vid-thumb">📐</div>
+      <div class="vid-info"><h4>Straight Body Line</h4><p>"handstand hollow body line"</p></div>
+      <span class="pill pill-blue" style="font-size:10px">مهم</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-hd"><div class="card-hd-icon" style="background:rgba(34,197,94,.12)">💪</div>Planche</div>
+    <div class="vid-row">
+      <div class="vid-thumb">💪</div>
+      <div class="vid-info"><h4>Planche للمبتدئين</h4><p>"Planche tutorial beginner Tom Merrick"</p></div>
+      <span class="pill pill-red" style="font-size:10px">الأهم</span>
+    </div>
+    <div class="vid-row">
+      <div class="vid-thumb">⬇️</div>
+      <div class="vid-info"><h4>Pseudo Planche Push-ups</h4><p>"Pseudo planche push up tutorial"</p></div>
+      <span class="pill pill-green" style="font-size:10px">مهم</span>
+    </div>
+    <div class="vid-row">
+      <div class="vid-thumb">🖐️</div>
+      <div class="vid-info"><h4>Wrist Conditioning</h4><p>"wrist conditioning for planche"</p></div>
+      <span class="pill pill-red" style="font-size:10px">ضروري</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="card-hd-icon" style="background:rgba(245,158,11,.12)">📺</div>قنوات متخصصة — اشترك فيها</div>
+    <div class="vid-row">
+      <div class="vid-thumb">🤸</div>
+      <div class="vid-info"><h4>Yuri Marmerstein</h4><p>أفضل قناة للـ handstand في العالم</p></div>
+      <span class="pill pill-blue" style="font-size:10px">HS</span>
+    </div>
+    <div class="vid-row">
+      <div class="vid-thumb">📐</div>
+      <div class="vid-info"><h4>Emmet Louis</h4><p>handstand علمي ومنظم جداً</p></div>
+      <span class="pill pill-blue" style="font-size:10px">HS</span>
+    </div>
+    <div class="vid-row">
+      <div class="vid-thumb">💪</div>
+      <div class="vid-info"><h4>Simonster</h4><p>أفضل قناة للـ calisthenics skills</p></div>
+      <span class="pill pill-green" style="font-size:10px">Planche</span>
+    </div>
+    <div class="vid-row">
+      <div class="vid-thumb">🎯</div>
+      <div class="vid-info"><h4>Tom Merrick</h4><p>شرح واضح لكل تمارين الكاليستينكس</p></div>
+      <span class="pill pill-amber" style="font-size:10px">الاتنين</span>
+    </div>
+    <div class="vid-row">
+      <div class="vid-thumb">🌟</div>
+      <div class="vid-info"><h4>Saturno Movement</h4><p>Planche والـ gymnastics movements</p></div>
+      <span class="pill pill-green" style="font-size:10px">Planche</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════ BOTTOM NAV (mobile) ══════════ -->
+<nav class="bottom-nav">
+  <button class="bnav-btn active" onclick="showTab('today',this)">
+    <span class="nav-icon">📅</span>اليوم
+  </button>
+  <button class="bnav-btn" onclick="showTab('schedule',this)">
+    <span class="nav-icon">📆</span>الجدول
+  </button>
+  <button class="bnav-btn" onclick="showTab('hs',this)">
+    <span class="nav-icon">🤸</span>HS
+  </button>
+  <button class="bnav-btn" onclick="showTab('pl',this)">
+    <span class="nav-icon">💪</span>Planche
+  </button>
+  <button class="bnav-btn" onclick="showTab('tips',this)">
+    <span class="nav-icon">⭐</span>نصائح
+  </button>
+</nav>
+
+<script>
+/* ─── DATA ─── */
+const MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const DAYS_AR = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+const DAY_PLANS = {
+  0: { // Sunday - REST
+    type:'rest', duration:0, exercises:0,
+    pills: [['😴 راحة كاملة','muted']],
+    content: `
+      <div class="rest-hero">
+        <div class="rest-hero-icon">😴</div>
+        <div class="rest-hero-title">يوم راحة كاملة</div>
+        <div class="rest-hero-sub">الجسم بيتطور في الراحة مش في التمرين.<br>إطالة خفيفة بس وكل حاجة تمام.</div>
+      </div>
+      <div class="sec-title">🧘 إطالة خفيفة</div>
+      <div class="workout-block">
+        <div class="ex-row">
+          <div class="ex-img"><div class="ex-img-placeholder">🙏</div></div>
+          <div class="ex-info"><div class="ex-name">إطالة الرسغين</div></div>
+          <div class="ex-badge eb-muted">5 دق</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img"><div class="ex-img-placeholder">🧘</div></div>
+          <div class="ex-info"><div class="ex-name">Child's pose</div></div>
+          <div class="ex-badge eb-muted">2 × 60 ث</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-img"><div class="ex-img-placeholder">🔄</div></div>
+          <div class="ex-info"><div class="ex-name">Shoulder cross stretch</div></div>
+          <div class="ex-badge eb-muted">45 ث × جهة</div>
+        </div>
+      </div>
+      <div class="alert a-green">
+        <div class="alert-icon">✅</div>
+        <div class="alert-text"><strong>تذكر:</strong> بروتين كافي 100g+ و8 ساعات نوم — العضلات بتتبني في النوم مش في التمرين</div>
+      </div>`
+  },
+  1: { // Monday - BOTH
+    type:'both', duration:75, exercises:10,
+    pills:[['🤸 Handstand','blue'],['💪 Planche','green'],['⏱️ 75 دق','amber']],
+    content: buildBoth()
+  },
+  2: { // Tuesday - HS
+    type:'hs', duration:40, exercises:5,
+    pills:[['🤸 Handstand فقط','blue'],['⏱️ 40 دق','amber']],
+    content: buildHS()
+  },
+  3: { // Wednesday - BOTH
+    type:'both', duration:75, exercises:10,
+    pills:[['🤸 Handstand','blue'],['💪 Planche','green'],['⏱️ 75 دق','amber']],
+    content: buildBoth()
+  },
+  4: { // Thursday - SUPPORT
+    type:'support', duration:45, exercises:6,
+    pills:[['💪 Planche دعم','green'],['🔥 Core','amber']],
+    content: buildSupport()
+  },
+  5: { // Friday - BOTH
+    type:'both', duration:75, exercises:10,
+    pills:[['🤸 Handstand','blue'],['💪 Planche','green'],['⏱️ 75 دق','amber']],
+    content: buildBoth()
+  },
+  6: { // Saturday - SUPPORT2
+    type:'support2', duration:50, exercises:7,
+    pills:[['💪 Planche','green'],['🤸 HS خفيف','blue']],
+    content: buildSat()
+  }
+};
+
+function exRow(icon, name, sets, badge, cls='eb-blue') {
+  return `<div class="ex-row">
+    <div class="ex-img" data-slot="IMG"><div class="ex-img-placeholder">${icon}</div></div>
+    <div class="ex-info"><div class="ex-name">${name}</div><div class="ex-sets">${sets}</div></div>
+    <div class="ex-badge ${cls}">${badge}</div>
+  </div>`;
+}
+
+function buildBoth() {
+  return `
+    <div class="sec-title" style="color:var(--blue-l)">🤸 Handstand — أولاً دايماً</div>
+    <div class="workout-block" style="margin-bottom:12px">
+      ${exRow('🤸','Wall HS — finger pressure drills','5 مجموعات','5 × 20 ث','eb-blue')}
+      ${exRow('⬆️','Kick-up attempts (straight body)','محاولات','10 يومياً','eb-blue')}
+      ${exRow('⏱️','Free HS max holds','5 مجموعات','5 × max','eb-blue')}
+      ${exRow('🐦','Tuck HS hold','4 مجموعات','4 × max','eb-muted')}
+      <div class="rest-row">⏱️ راحة: 60-90 ثانية</div>
+    </div>
+    <div class="sec-title" style="color:var(--green-l)">💪 Planche — بعد الـ HS</div>
+    <div class="workout-block">
+      ${exRow('💪','Tuck Planche Hold','5 مجموعات','5 × max','eb-green')}
+      ${exRow('↗️','Planche Lean على الأرض','4 مجموعات','4 × 20 ث','eb-green')}
+      ${exRow('⬇️','Pseudo Planche Push-ups','4 مجموعات','4 × 8-12','eb-green')}
+      ${exRow('🏋️','Hollow Body Hold','4 مجموعات','4 × 30 ث','eb-muted')}
+      ${exRow('🦾','Scapular Push-ups','3 مجموعات','3 × 15','eb-muted')}
+      ${exRow('🦵','L-sit Hold','4 مجموعات','4 × max','eb-muted')}
+      <div class="rest-row">⏱️ 2-3 دق للـ holds — 90 ث للعدات</div>
+    </div>
+    <div class="alert a-blue" style="margin-top:12px">
+      <div class="alert-icon">💡</div>
+      <div class="alert-text"><strong>الترتيب:</strong> تسخين → HS → Planche → إطالة. ماتغيرش الترتيب ده أبداً</div>
+    </div>`;
+}
+
+function buildHS() {
+  return `
+    <div class="sec-title" style="color:var(--blue-l)">🤸 Handstand — تركيز كامل</div>
+    <div class="workout-block">
+      ${exRow('🤸','Wall HS — finger pressure drills','6 مجموعات','6 × 20 ث','eb-blue')}
+      ${exRow('⬆️','Kick-up consistency practice','محاولات','15 محاولة','eb-blue')}
+      ${exRow('⏱️','Free HS max holds','8 مجموعات','8 × max','eb-blue')}
+      ${exRow('🐦','Tuck HS hold','4 مجموعات','4 × max','eb-muted')}
+      ${exRow('🚶','HS walking','3 مجموعات','3 × max','eb-muted')}
+      <div class="rest-row">⏱️ راحة: 60-90 ثانية</div>
+    </div>
+    <div class="alert a-blue" style="margin-top:12px">
+      <div class="alert-icon">🎯</div>
+      <div class="alert-text"><strong>يوم تركيز على الـ balance:</strong> جودة الـ kick-up هي الأهم النهارده — مش العدد</div>
+    </div>`;
+}
+
+function buildSupport() {
+  return `
+    <div class="sec-title" style="color:var(--green-l)">💪 Planche Support + Core</div>
+    <div class="workout-block">
+      ${exRow('💎','Diamond Push-ups','4 مجموعات','4 × 12-15','eb-green')}
+      ${exRow('⬇️','Dips عميق','4 مجموعات','4 × 15','eb-green')}
+      ${exRow('🔺','Pike Push-ups','4 مجموعات','4 × 10','eb-green')}
+      ${exRow('🏋️','Hollow Body Hold','4 مجموعات','4 × 40 ث','eb-muted')}
+      ${exRow('🦵','L-sit Hold','4 مجموعات','4 × max','eb-muted')}
+      ${exRow('🖐️','Wrist Conditioning','3 مجموعات','3 × 60 ث','eb-muted')}
+      <div class="rest-row">⏱️ راحة: 90 ثانية</div>
+    </div>
+    <div class="alert a-green" style="margin-top:12px">
+      <div class="alert-icon">💪</div>
+      <div class="alert-text"><strong>يوم دعم:</strong> ركز على جودة الحركة والـ range of motion الكامل</div>
+    </div>`;
+}
+
+function buildSat() {
+  return `
+    <div class="sec-title" style="color:var(--green-l)">💪 Planche Support</div>
+    <div class="workout-block" style="margin-bottom:12px">
+      ${exRow('💪','Tuck Planche Hold','4 مجموعات','4 × max','eb-green')}
+      ${exRow('↗️','Pseudo Planche Push-ups','3 مجموعات','3 × 10','eb-green')}
+      ${exRow('↗️','Planche Lean','3 مجموعات','3 × 20 ث','eb-muted')}
+      <div class="rest-row">⏱️ راحة: 2 دقائق</div>
+    </div>
+    <div class="sec-title" style="color:var(--blue-l)">🤸 HS خفيف</div>
+    <div class="workout-block">
+      ${exRow('🤸','Wall HS hold','4 مجموعات','4 × 30 ث','eb-blue')}
+      ${exRow('⬆️','Free HS attempts','محاولات','8 محاولة','eb-blue')}
+      ${exRow('🚶','HS walking','3 مجموعات','3 × max','eb-muted')}
+      <div class="rest-row">⏱️ راحة: 60 ثانية</div>
+    </div>`;
+}
+
+/* ─── WEEK GRID ─── */
+const WEEK_DATA = [
+  { label:'أحد',  type:'rest',     icon:'😴', color:'var(--ink3)', idx:0 },
+  { label:'إثن',  type:'both',     icon:'🔵', color:'var(--blue-l)', idx:1 },
+  { label:'ثلا',  type:'hs',       icon:'🤸', color:'var(--blue-l)', idx:2 },
+  { label:'أرب',  type:'both',     icon:'🔵', color:'var(--blue-l)', idx:3 },
+  { label:'خمي',  type:'support',  icon:'💚', color:'var(--green-l)', idx:4 },
+  { label:'جمع',  type:'both',     icon:'🔵', color:'var(--blue-l)', idx:5 },
+  { label:'سبت',  type:'support2', icon:'💚', color:'var(--green-l)', idx:6 },
+];
+
+const TYPE_LABEL = {
+  rest:'راحة', both:'HS+PL', hs:'HS', support:'PL', support2:'PL+HS'
+};
+
+function renderWeek(todayIdx) {
+  const wr = document.getElementById('week-row');
+  wr.innerHTML = WEEK_DATA.map(d => `
+    <div class="day-card ${d.idx===todayIdx?'today-dc':''} ${d.type==='rest'?'rest-dc':''}">
+      <div class="dc-name">${d.label}</div>
+      <div class="dc-icon">${d.icon}</div>
+      <div class="dc-label" style="color:${d.color}">${TYPE_LABEL[d.type]}</div>
+      ${d.idx===todayIdx?'<div class="dc-today-dot"></div>':''}
+    </div>`).join('');
+}
+
+/* ─── RENDER TODAY ─── */
+function renderToday() {
+  const now = new Date();
+  const di = now.getDay();
+  const plan = DAY_PLANS[di];
+  const fullDate = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+
+  document.getElementById('hdr-date').textContent = `${DAYS_AR[di]} ${now.getDate()}/${now.getMonth()+1}`;
+  document.getElementById('today-chip-txt').textContent = DAYS_AR[di];
+  document.getElementById('today-day').textContent = fullDate;
+  document.getElementById('today-subtitle').textContent =
+    plan.type === 'rest' ? 'يوم راحة — إطالة خفيفة بس 🧘' :
+    plan.type === 'both' ? 'تمرين كامل — Handstand + Planche 🔥' :
+    plan.type === 'hs'   ? 'يوم Handstand — تركيز وتكرار 🤸' :
+                           'يوم دعم — Planche Support + Core 💪';
+
+  const pillsEl = document.getElementById('today-pills');
+  pillsEl.innerHTML = plan.pills.map(([t,c]) =>
+    `<div class="pill pill-${c}">${t}</div>`).join('');
+
+  document.getElementById('stat-dur').textContent = plan.duration || '—';
+  document.getElementById('stat-ex').textContent  = plan.exercises || '—';
+  document.getElementById('stat-wk').textContent  = getWeek();
+
+  document.getElementById('today-content').innerHTML = plan.content;
+
+  renderWeek(di);
+}
+
+function getWeek() {
+  const s = new Date('2025-01-06');
+  return Math.max(1, Math.ceil((new Date()-s)/(7*864e5)));
+}
+
+/* ─── TABS ─── */
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  // sync both navs
+  document.querySelectorAll('.bnav-btn, .dnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // mark all matching buttons
+  document.querySelectorAll(`[onclick="showTab('${id}',this)"]`).forEach(b => b.classList.add('active'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─── THEME ─── */
+function toggleTheme() {
+  const html = document.documentElement;
+  const dark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', dark ? 'light' : 'dark');
+  document.getElementById('theme-btn').textContent = dark ? '☀️' : '🌙';
+  localStorage.setItem('theme', dark ? 'light' : 'dark');
+}
+
+(function() {
+  const t = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('theme-btn').textContent = t === 'dark' ? '🌙' : '☀️';
+})();
+
+/* ─── INIT ─── */
+renderToday();
+</script>
+</body>
+</html>
